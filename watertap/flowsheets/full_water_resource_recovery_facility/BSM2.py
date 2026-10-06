@@ -23,23 +23,20 @@ __author__ = "Alejandro Garciadiego, Adam Atia, Marcus Holly, Chenyu Wang, Ben K
 import pyomo.environ as pyo
 
 from pyomo.network import Arc, SequentialDecomposition
-from watertap.unit_models.anaerobic_digester import AD, ADScaler, ADInitializationMethod
-from watertap.unit_models.thickener import Thickener, ThickenerScaler
-from watertap.unit_models.dewatering import DewateringUnit, DewatererScaler
-from watertap.unit_models.cstr import CSTR, CSTRScaler
-from watertap.unit_models.clarifier import Clarifier, ClarifierScaler
+from watertap.unit_models.anaerobic_digester import AD, ADInitializationMethod
+from watertap.unit_models.thickener import Thickener
+from watertap.unit_models.dewatering import DewateringUnit
+from watertap.unit_models.cstr import CSTR
+from watertap.unit_models.clarifier import Clarifier
 
 from watertap.unit_models.translators.translator_asm1_adm1 import (
     Translator_ASM1_ADM1,
-    ASM1ADM1Scaler,
 )
 from watertap.unit_models.translators.translator_adm1_asm1 import (
     Translator_ADM1_ASM1,
-    ADM1ASM1Scaler,
 )
 
 from watertap.core.solvers import get_solver
-from idaes.core.initialization import BlockTriangularizationInitializer
 from idaes.core.scaling import set_scaling_factor
 from idaes.core.scaling.custom_scaler_base import (
     CustomScalerBase,
@@ -69,7 +66,6 @@ import idaes.logger as idaeslog
 
 from watertap.unit_models.aeration_tank import (
     AerationTank,
-    AerationTankScaler,
     ElectricityConsumption,
 )
 from watertap.property_models.unit_specific.activated_sludge.asm1_properties import (
