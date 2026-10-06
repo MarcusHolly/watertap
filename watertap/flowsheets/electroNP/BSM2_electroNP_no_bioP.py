@@ -89,6 +89,7 @@ from watertap.unit_models.thickener import (
 from watertap.unit_models.cstr import CSTR
 from watertap.core.util.initialization import check_solve
 from watertap.unit_models.electroNP_ZO import ElectroNPZO
+from idaes.core.util import DiagnosticsToolbox
 
 # Set up logger
 _log = idaeslog.getLogger(__name__)
@@ -121,6 +122,17 @@ def main(has_electroNP=False):
         logger=_log,
         fail_flag=True,
     )
+
+    dt = DiagnosticsToolbox(m)
+    print("---Numerical Issues---")
+    dt.report_numerical_issues()
+
+    import idaes.core.util.scaling as iscale
+
+    badly_scaled_var_list = iscale.badly_scaled_var_generator(m, large=1e2, small=1e-2)
+    print("----------------   Badly Scaled Vars   ----------------")
+    for x in badly_scaled_var_list:
+        print(f"{x[0].name}\t{x[0].value}\tsf: {iscale.get_scaling_factor(x[0])}")
 
     return m, results
 
