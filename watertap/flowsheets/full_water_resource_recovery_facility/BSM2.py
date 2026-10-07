@@ -79,7 +79,6 @@ from watertap.costing.unit_models.clarifier import (
     cost_circular_clarifier,
     cost_primary_clarifier,
 )
-from idaes.core.util import DiagnosticsToolbox
 
 # Set up logger
 _log = idaeslog.getLogger(__name__)
@@ -95,21 +94,6 @@ def main(reactor_volume_equalities=True):
     scale_system(m)
     solve(m)
 
-    dt = DiagnosticsToolbox(m)
-    print("---Structural Issues---")
-    dt.report_structural_issues()
-    print("---Numerical Issues After 1st Solve---")
-    dt.report_numerical_issues()
-    # dt.display_constraints_with_large_residuals()
-    # dt.display_variables_with_extreme_jacobians()
-    import idaes.core.util.scaling as iscale
-
-    # Custom scaling visualization tools
-    badly_scaled_var_list = iscale.badly_scaled_var_generator(m, large=1e2, small=1e-2)
-    print("----------------   Badly Scaled Vars   ----------------")
-    for x in badly_scaled_var_list:
-        print(f"{x[0].name}\t{x[0].value}\tsf: {iscale.get_scaling_factor(x[0])}")
-
     print("\n\n=============SIMULATION RESULTS=============\n\n")
     # display_results(m)
     display_costing(m)
@@ -117,9 +101,6 @@ def main(reactor_volume_equalities=True):
     setup_optimization(m, reactor_volume_equalities=reactor_volume_equalities)
     rescale_system(m)
     results = solve(m, tee=True)
-
-    print("---Numerical Issues After 2nd Solve---")
-    dt.report_numerical_issues()
 
     print("\n\n=============OPTIMIZATION RESULTS=============\n\n")
     # display_results(m)
