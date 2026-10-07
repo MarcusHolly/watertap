@@ -299,7 +299,7 @@ class ADInitializationMethod(Enum):
     healthy_root_adm1 = 1
     # Healthy-root routine for the modified ADM1 property package (BSM2-P).
     healthy_root_modified_adm1 = 2
-    # Pick one of the two healthy-root routines from the liquid property package.
+    # Picks one of the two healthy-root routines from the liquid property package.
     healthy_root_auto = 3
 
 

@@ -393,22 +393,6 @@ def set_operating_conditions(m):
 
 
 def scale_system(m):
-    # for var in m.fs.component_data_objects(pyo.Var, descend_into=True):
-    #     if "flow_vol" in var.name:
-    #         set_scaling_factor(var, 1e2)
-    #     if "temperature" in var.name:
-    #         set_scaling_factor(var, 1e-2)
-    #     if "pressure" in var.name:
-    #         set_scaling_factor(var, 1e-5)
-    #     if "conc_mass_comp" in var.name:
-    #         set_scaling_factor(var, 1e3)
-    #     if "conc_mol" in var.name:
-    #         set_scaling_factor(var, 1e2)
-    #     if "alkalinity" in var.name:
-    #         set_scaling_factor(var, 1e3)
-    #     if "split_fraction" in var.name:
-    #         set_scaling_factor(var, 1e1)
-
     asm1_scaler = m.fs.props_ASM1.default_state_scaler_class()
     asm1_rxn_scaler = m.fs.ASM1_rxn_props.default_reaction_scaler_class()
     adm1_scaler = m.fs.props_ADM1.default_state_scaler_class()
@@ -419,13 +403,10 @@ def scale_system(m):
     asm1_scaler.default_scaling_factors["temperature"] = 1e-2
     asm1_scaler.default_scaling_factors["pressure"] = 1e-5
     for c in m.fs.props_ASM1.component_list:
-        # asm1_scaler.default_scaling_factors[f"conc_mass_comp[{c}]"] = 1e3
         if c in ["X_aa", "X_h2", "X_I", "X_BA", "X_BH", "X_P", "X_S"]:
             asm1_scaler.default_scaling_factors[f"conc_mass_comp[{c}]"] = 1
         else:
             asm1_scaler.default_scaling_factors[f"conc_mass_comp[{c}]"] = 1e3
-
-    # asm1_rxn_scaler.default_scaling_factors["reaction_rate"] = 1e6
 
     adm1_scaler.default_scaling_factors["flow_vol"] = 1e2
     adm1_scaler.default_scaling_factors["temperature"] = 1e-2
@@ -436,7 +417,6 @@ def scale_system(m):
     for c in m.fs.props_vap.component_list:
         adm1_vapor_scaler.default_scaling_factors[f"pressure_sat[{c}]"] = 1e-3
         adm1_vapor_scaler.default_scaling_factors[f"conc_mass_comp[{c}]"] = 1e2
-    # adm1_vapor_scaler.default_scaling_factors["conc_mass_comp[S_h2]"] = 1e3
 
     m.fs.props_ASM1.default_state_scaler_object = asm1_scaler
     m.fs.ASM1_rxn_props.default_reaction_scaler_object = asm1_rxn_scaler
@@ -469,14 +449,8 @@ def scale_system(m):
                     print(f"Scaling {blk.name}")
                     scaler = blk.default_scaler()
                     scaler.default_scaling_factors["rate_reaction_extent"] = 1e3
-                    # scaler.default_scaling_factors["rate_reaction_generation"] = 1e3
                     scaler.default_scaling_factors["conc_mol_comp"] = 1e2
                     scaler.scale_model(blk)
-                # elif blk == m.fs.CL:
-                #     scaler = blk.default_scaler()
-                #     for c in m.fs.props_ASM1.component_list:
-                #         scaler.default_scaling_factors[f"split_fraction[0,underflow,{c}]"] = 1e1
-                #     scaler.scale_model(blk)
                 else:
                     print(f"Scaling {blk.name}")
                     scaler = blk.default_scaler()
