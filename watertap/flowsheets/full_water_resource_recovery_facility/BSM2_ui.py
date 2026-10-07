@@ -13,7 +13,7 @@
 GUI configuration for the base BSM2 flowsheet.
 """
 
-from pyomo.environ import units as pyunits, TransformationFactory
+from pyomo.environ import units as pyunits
 
 from idaes_flowsheet_processor.api import FlowsheetInterface
 
